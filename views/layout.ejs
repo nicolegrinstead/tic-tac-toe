@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% settings.cssFiles.forEach(function(file) { %>
+      <link href="<%- file %>?v=<%= settings.version %>" rel="stylesheet" />
+    <% }); %>
+
+    <title><%- title %></title>
+    <link rel="icon" type="image/png" href="../img/favicon.ico">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+
+    <% settings.jsFiles.forEach(function(file) { %>
+      <script src="<%- file %>?v=<%= settings.version %>"></script>
+    <% }); %>
+  </head>
+  <body>
+<div class="wrapper">
+  <!-- start: Header -->
+  <div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+
+        <a class="brand" href="/"><span>Hello world</span></a>
+
+            <div class="nav-collapse collapse">
+              <ul class="nav">
+                <li id="linkeOne">
+                    <a href="#">Link one</a>
+                </li>
+                <li id="linkTwo">
+                    <a href="#">Link two</a>
+                </li>
+              </ul>
+            </div>
+      </div>
+    </div>
+  </div>
+  <!-- end: Header -->
+  <div class="container-fluid">
+    <div class="row-fluid">
+
+      <div id="content" class="span11">
+        <%- body %>
+      </div>
+    </div>
+  </div> <!-- wrapper -->
+
+  <div class='footer-push'></div>
+
+</div>
+  <div class="clearfix"></div>
+
+<% settings.jsFiles.forEach(function(file) { %>
+
+  <script src="<%- file %>?v=<%= settings.version %>"></script>
+<% }); %>
+
+
+<% if (typeof(pageScript)!='undefined') { %>
+<script src="<%- pageScript %>?v=<%= settings.version %>"></script>
+<% } %>
+
+</body>
+</html>

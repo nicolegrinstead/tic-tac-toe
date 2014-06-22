@@ -1,0 +1,32 @@
+<div id="game-container" class="container">
+</div>
+
+<script>
+$(document).ready(function() {
+  startNewGame();  
+  $(document).on('click', '#game-square', function() { makePlay($(this));}); 
+});
+
+function startNewGame(){
+  $.get("new-game-board", function(data) {
+    for (var i=0; i<3; i++){
+      $("#game-container").append("<div class='row' id='row-"+i+"'></div>");
+
+      for (var j=0; j<3; j++){
+        var gameSquareDiv = "<div id='game-square' data-x='"+i+"' data-y='"+j+"' class='col-md-4 well'></div>";
+        $("#game-container #row-"+i).append(gameSquareDiv);
+      }
+    }
+  });
+}
+
+function makePlay(clickedSquare){ 
+  console.log("playing "+ clickedSquare.data("x") + clickedSquare.data("y") );
+  $.post( "make-play", { xCoord: clickedSquare.data("x"), yCoord: clickedSquare.data("y") }).done(function( data ) {
+      console.log( "Data Loaded: " + data );
+
+  });
+}
+
+
+</script>
