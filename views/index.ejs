@@ -3,6 +3,17 @@
   </div>
 </div>
 
+<!-- game over modal -->
+<div id="gameOverModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div id="final-message-container">
+        <h3 id="final-message"></h3>  
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 $(document).ready(function() {
   startNewGame();  
@@ -31,9 +42,11 @@ function makePlay(clickedSquare){
   $.post( "make-play", { xCoord: clickedSquare.data("x"), yCoord: clickedSquare.data("y") }).done(function( data ) {
     drawBoard(data.gameBoard);
     if (!data.playsLeft){
-    console.log("here?");
-      $( "#game-square" ).off( "click", "**" ); 
-      //$("#game-square").off();
+      console.log(data.winner);
+      var finalMessgeText = data.winner ? "Congratulations "+data.winner+" wins!" : "Tie game!";
+      console.log(finalMessgeText);
+      $('#final-message').append(finalMessgeText);
+      $('#gameOverModal').modal('show');
     }
   });
 }

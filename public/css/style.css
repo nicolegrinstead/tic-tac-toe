@@ -23,3 +23,8 @@
 .board-row:last-child{ 
   margin-bottom: 0px;
 };
+#final-message-container{ 
+
+  text-align: center;
+  vertical-align: middle;
+  }

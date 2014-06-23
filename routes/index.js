@@ -25,5 +25,5 @@ exports.makePlay = function(req, res){
   sess.playPending = false;
   sess.game = game.toJson();
 
-  res.send({gameBoard:game.board, playsLeft:game.playsLeft});
+  res.send({gameBoard:game.board, playsLeft:game.playsLeft, winner:game.winner});
 };
