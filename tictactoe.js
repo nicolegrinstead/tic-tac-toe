@@ -57,7 +57,6 @@ function findDefensivePlayInRowsAndColumns(gameBoard){
       }
     }
 
-
     if (oRowCount == 2){ 
       return rowOpening;
     } 

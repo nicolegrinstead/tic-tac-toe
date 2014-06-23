@@ -15,6 +15,7 @@
     "underscore": "*",
     "connect":"2.19.6",
     "mocha": "*", 
-    "express-session":"1.5.0"
+    "express-session":"1.5.0", 
+    "body-parser":"1.4.3"
   }
 }

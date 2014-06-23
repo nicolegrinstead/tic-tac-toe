@@ -13,15 +13,19 @@ exports.newGameBoard = function(req, res){
 
 exports.makePlay = function(req, res){
   var sess = req.session;
-  var move = {xCoord: req.xCoord, yCoord: req.yCoord};
 
-  if (!sess.gameBoard){ 
-    console.log("nothing in session");
-    sess.gameBoard = tictactoe.newGameBoard();
-  } else {
-    console.log("something in session and move was "); 
-    sess.gameBoard = tictactoe.playOnCurrentGame(sess.gameBoard, move);
+  if (!sess.playPending){
+    sess.playPending = true;
+
+    var move = {xCoord: req.body.xCoord, yCoord: req.body.yCoord};
+
+    if (!sess.gameBoard){ 
+      sess.gameBoard = tictactoe.newGameBoard();
+    } else {
+      sess.gameBoard = tictactoe.playOnCurrentGame(sess.gameBoard, move);
+    }
   }
-  console.log(sess.gameBoard);
+  sess.playPending = false;
+
   res.send({gameBoard:sess.gameBoard});
 };

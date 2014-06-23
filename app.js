@@ -9,6 +9,7 @@ var routes = require('./routes');
 var expressLayouts = require('express-ejs-layouts');
 var package = require('./package.json');
 var resources = require('./app.resources.js');
+var bodyParser = require('body-parser')
 
 var http = require('http');
 var path = require('path');
@@ -21,8 +22,12 @@ app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
-app.use(session({secret: 'keyboard cat'}));
 
+app.use(bodyParser.urlencoded())
+app.use(bodyParser.json())
+app.use(bodyParser.json({ type: 'application/vnd.api+json' }))
+
+app.use(session({secret: 'keyboard cat'}));
 app.use(expressLayouts);
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -37,6 +42,7 @@ var port = process.env.PORT || 5000;
 app.get('/', routes.index);
 app.get('/new-game-board', routes.newGameBoard);
 app.post('/make-play', routes.makePlay);
+///view/:id
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
