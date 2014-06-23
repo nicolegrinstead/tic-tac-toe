@@ -1,4 +1,6 @@
-<div id="game-container" class="container col-md-6 col-md-offset-3">
+<div id="container" class="container col-md-6 col-md-offset-3">
+  <div id="game-container">
+  </div>
 </div>
 
 <script>
@@ -17,10 +19,10 @@ $(document).ready(function() {
 function startNewGame(){
   $.get("new-game-board", function(data) {
     for (var i=0; i<3; i++){
-      $("#game-container").append("<div class='row' id='row-"+i+"'></div>");
+      $("#game-container").append("<div class='board-row' id='row-"+i+"'></div>");
 
       for (var j=0; j<3; j++){
-        var gameSquareDiv = "<div id='game-square' data-x='"+i+"' data-y='"+j+"' class='col-md-4 well'></div>";
+        var gameSquareDiv = "<div id='game-square' data-x='"+i+"' data-y='"+j+"' ></div>";
         $("#game-container #row-"+i).append(gameSquareDiv);
       }
     }
