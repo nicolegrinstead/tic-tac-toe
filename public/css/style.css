@@ -1,9 +1,9 @@
 #game-square{ 
-	width:100px;
-	height:100px;
+	width:120px;
+	height:120px;
 	border-radius:1px;
 	border-color:red;
 }
 #game-piece{ 
-	font-size:60px;
+	font-size:80px;
 }

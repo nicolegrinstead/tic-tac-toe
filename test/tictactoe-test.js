@@ -40,7 +40,7 @@ describe('Index', function(){
     game.playOnCurrentGame({xCoord:0, yCoord:0});                           //   O | O | X
     game.playOnCurrentGame({xCoord:0, yCoord:1});                           //  ___________
                                                                             //     | X |   
-    assert.deepEqual([ [ 'O', 'O', 'X' ], [ , 'X' ], [] ], game.board);          //  ___________ 
+    assert.deepEqual([ [ 'O', 'O', 'X' ], [ , 'X' ], [] ], game.board);     //  ___________ 
                                                                             //     |   |
   })  
 

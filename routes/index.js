@@ -7,9 +7,6 @@ exports.index = function(req, res){
 exports.newGameBoard = function(req, res){
   var sess = req.session;
   sess.game = new TicTacToeGame().toJson();
-  //sess.game.playOnCurrentGame({xCoord:0, yCoord:0});
-//console.log("game is in new board" + sess.game);
-
 
   res.send({gameBoard:sess.game.board});
 };

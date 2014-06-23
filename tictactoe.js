@@ -3,12 +3,10 @@ function TicTacToeGame(){
 } 
 
 TicTacToeGame.prototype.toJson = function (){ 
-  console.log(this.board);
   return JSON.stringify(this.board); 
 }
 
 TicTacToeGame.prototype.fromJson = function (jsonString){ 
-  console.log(jsonString);
   this.board = JSON.parse(jsonString);
 }
 
@@ -149,6 +147,4 @@ function makeOffensivePlay(board){
   return board;
 }
 
-//exports.newboard = newboard;
-//exports.playOnCurrentGame = playOnCurrentGame;
 module.exports = TicTacToeGame;
