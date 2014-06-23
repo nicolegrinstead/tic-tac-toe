@@ -8,7 +8,7 @@ exports.newGameBoard = function(req, res){
   var sess = req.session;
   sess.game = new TicTacToeGame().toJson();
 
-  res.send({gameBoard:sess.game.board});
+  res.send({gameBoard:sess.game.board, playsLeft:sess.game.playsLeft});
 };
 
 exports.makePlay = function(req, res){
@@ -25,5 +25,5 @@ exports.makePlay = function(req, res){
   sess.playPending = false;
   sess.game = game.toJson();
 
-  res.send({gameBoard:game.board});
+  res.send({gameBoard:game.board, playsLeft:game.playsLeft});
 };

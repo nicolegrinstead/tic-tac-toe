@@ -1,7 +1,7 @@
 var TicTacToeGame = require('../tictactoe.js');
 var assert = require("assert");
 
-describe('Index', function(){
+describe('tic tac toe', function(){
   it('can create an empty game board', function(){
     var game = new TicTacToeGame();
 
@@ -100,7 +100,7 @@ describe('Index', function(){
     game.playOnCurrentGame({xCoord:2, yCoord:1});                           //  ___________ 
                                                                             //   X | O | O
 
-    assert.deepEqual([[,"X","O"],["X","O","X"],["X","O","O"]], game.board);
+    assert.deepEqual([["X","X","O"],[,"O","X"],["X","O","O"]], game.board);
   }) 
 
   it('will make the winning move if available', function(){
@@ -112,5 +112,19 @@ describe('Index', function(){
                                                                             //  ___________ 
                                                                             //   X |    | O
     assert.deepEqual([["O","O","X"],[,"X"],["X",,"O"]], game.board);
+    assert.equal(false, game.playsLeft);
   }) 
+
+  it('will keep playing until the game ends', function(){
+    var game = new TicTacToeGame();
+                                                                            //
+    game.playOnCurrentGame({xCoord:0, yCoord:0});                           //   O |  X | O
+    game.playOnCurrentGame({xCoord:0, yCoord:2});                           //  ___________
+    game.playOnCurrentGame({xCoord:2, yCoord:1});                           //   X  | X |   
+                                                                            //  ___________ 
+                                                                            //     |  O | 
+
+    assert.deepEqual([["O","X","O"],["X","X",],[,"O",]], game.board);
+    assert.equal(true, game.playsLeft);
+  })
 })
