@@ -18,7 +18,7 @@ exports.makePlay = function(req, res){
     game.fromJson(sess.game);
   }
 
-  if (!sess.playPending){
+  if (!sess.playPending && game.playsLeft){
     sess.playPending = true;
     game.playOnCurrentGame({xCoord: req.body.xCoord, yCoord: req.body.yCoord});
   }

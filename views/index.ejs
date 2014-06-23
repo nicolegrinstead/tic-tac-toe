@@ -6,10 +6,6 @@
 <script>
 $(document).ready(function() {
   startNewGame();  
-  
-  $( "#target" ).click(function() {
-    startNewGame()
-  });
 
   $(document).on('click', '#game-square', function(e) { 
     makePlay($(this));
@@ -33,10 +29,12 @@ function makePlay(clickedSquare){
   clickedSquare.append("<span class='glyphicon glyphicon-unchecked' id='game-piece'></span>");
 
   $.post( "make-play", { xCoord: clickedSquare.data("x"), yCoord: clickedSquare.data("y") }).done(function( data ) {
-      if (data.playsLeft){ 
-        console.log("keep playing");
-      }
-      drawBoard(data.gameBoard);
+    drawBoard(data.gameBoard);
+    if (!data.playsLeft){
+    console.log("here?");
+      $( "#game-square" ).off( "click", "**" ); 
+      //$("#game-square").off();
+    }
   });
 }
 
