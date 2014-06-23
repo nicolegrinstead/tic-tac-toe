@@ -102,4 +102,15 @@ describe('Index', function(){
 
     assert.deepEqual([[,"X","O"],["X","O","X"],["X","O","O"]], board);
   }) 
+
+  it('will make the winning move if available', function(){
+    var newBoard = game.newGameBoard();
+                                                                            //
+    var board = game.playOnCurrentGame(newBoard, {xCoord:0, yCoord:0});     //   O | O  | X
+    board = game.playOnCurrentGame(board, {xCoord:0, yCoord:1});            //  ___________
+    board = game.playOnCurrentGame(board, {xCoord:2, yCoord:2});            //      | X |   
+                                                                            //  ___________ 
+                                                                            //   X |    | O
+    assert.deepEqual([["O","O","X"],[,"X"],["X",,"O"]], board);
+  }) 
 })
