@@ -114,4 +114,16 @@ describe('tic tac toe', function(){
                                                                            
     assert.deepEqual([["X"],[,"O"],[]], game.board);
   })
+
+/*  it('will make a move in the middle if the first move was in the corner', function(){
+    var game = new TicTacToeGame();
+                                                                            //
+    game.playOnCurrentGame({xCoord:0, yCoord:2});                           //   O | O  | X
+    game.playOnCurrentGame({xCoord:2, yCoord:0});                           //  ___________
+    game.playOnCurrentGame({xCoord:2, yCoord:2});                           //      | X |   
+                                                                            //  ___________ 
+                                                                            //   X |    | O
+    assert.deepEqual([["O","O","X"],[,"X"],["X",,"O"]], game.board);
+    assert.equal(false, game.playsLeft);
+  }) */
 })
