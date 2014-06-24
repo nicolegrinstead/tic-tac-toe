@@ -23,8 +23,10 @@
 .board-row:last-child{ 
   margin-bottom: 0px;
 };
-#final-message-container{ 
-
-  text-align: center;
-  vertical-align: middle;
-  }
+.modal-body {
+    width: 200px;
+}
+#top{ 
+   background-color: rgba(11, 11, 128, 1);
+   color:white; 
+}

@@ -27,7 +27,6 @@ TicTacToeGame.prototype.makeAiPlay = function (){
 
   if (winningPlay){ 
     this.board[winningPlay.xCoord][winningPlay.yCoord] = 'X';
-    console.log("in winning play");
     this.playsLeft = false;
     this.winner = 'X';
   } else { 
@@ -39,8 +38,6 @@ TicTacToeGame.prototype.makeAiPlay = function (){
         if (offensivePlay) { 
           this.board[offensivePlay.xCoord][offensivePlay.yCoord] = 'X';
         } else {  // no moves left!
-              console.log("no moves");
-
           this.playsLeft = false;
         }
       }
@@ -86,7 +83,6 @@ function findRowOrColumnCompletingPlay(board, pieceToLookFor){
 
     for (var j=0; j<3; j++){ 
 
-      //console.log("column opening is " + columnOpening);
       //look at row 
       if (board[i][j]===pieceToLookFor){ 
         rowCount++;
@@ -105,7 +101,6 @@ function findRowOrColumnCompletingPlay(board, pieceToLookFor){
       return rowOpening;
     } 
     if (columnCount == 2 && columnOpening){
-    //console.log("here " + columnOpening.xCoord + " " + columnOpening.yCoord); 
       return columnOpening;
     } 
   }

@@ -4,11 +4,12 @@
 </div>
 
 <!-- game over modal -->
-<div id="gameOverModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      <div id="final-message-container">
-        <h3 id="final-message"></h3>  
+<div class="modal fade bs-example-modal-sm" id="game-over-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="text-align:center">
+      <div class="modal-body">
+         <h2 class="modal-title" id="final-message"></h2>
+          <a href="/" class="btn btn-default btn-lg">Start new game?</a>        
       </div>
     </div>
   </div>
@@ -24,6 +25,8 @@ $(document).ready(function() {
 });
 
 function startNewGame(){
+//if this were a little bigger I would have put it in it's own file, but I decided to leave it here for ease of reading
+
   $.get("new-game-board", function(data) {
     for (var i=0; i<3; i++){
       $("#game-container").append("<div class='board-row' id='row-"+i+"'></div>");
@@ -42,11 +45,9 @@ function makePlay(clickedSquare){
   $.post( "make-play", { xCoord: clickedSquare.data("x"), yCoord: clickedSquare.data("y") }).done(function( data ) {
     drawBoard(data.gameBoard);
     if (!data.playsLeft){
-      console.log(data.winner);
       var finalMessgeText = data.winner ? "Congratulations "+data.winner+" wins!" : "Tie game!";
-      console.log(finalMessgeText);
       $('#final-message').append(finalMessgeText);
-      $('#gameOverModal').modal('show');
+      $('#game-over-modal').modal('show');
     }
   });
 }
