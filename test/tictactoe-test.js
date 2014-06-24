@@ -58,49 +58,37 @@ describe('tic tac toe', function(){
   it('will make a blocking move on one diagonal', function(){
     var game = new TicTacToeGame();
                                                                             //
-    game.playOnCurrentGame({xCoord:1, yCoord:1});                           //   O | X | 
-    game.playOnCurrentGame({xCoord:0, yCoord:0});                           //  ___________
-                                                                            //     | O |   
-                                                                            //  ___________ 
-                                                                            //     |   | X
-
-    assert.deepEqual([["O","X"],[,"O"],[,,"X"]], game.board);
-  })  
-
-  it('will make a blocking move the other diagonal', function(){
-    var game = new TicTacToeGame();
-                                                                            //
-    game.playOnCurrentGame({xCoord:1, yCoord:1});                           //     | X | O
+    game.playOnCurrentGame({xCoord:1, yCoord:1});                           //   X |   | O
     game.playOnCurrentGame({xCoord:0, yCoord:2});                           //  ___________
                                                                             //     | O |   
                                                                             //  ___________ 
                                                                             //   X |   | 
-
-    assert.deepEqual([[,"X","O"],[,"O"],["X"]], game.board);
-  }) 
+                      //[["X","undefined","O"],["undefined","O"],["X"]]                                                     
+    assert.deepEqual([["X",,"O"],[,"O"],["X"]], game.board);
+  })   
 
   it('can make several moves', function(){
     var game = new TicTacToeGame();
                                                                             //
-    game.playOnCurrentGame({xCoord:1, yCoord:1});                           //     | X | O
-    game.playOnCurrentGame({xCoord:0, yCoord:2});                           //  ___________
-    game.playOnCurrentGame({xCoord:2, yCoord:2});                           //     | O | X  
+    game.playOnCurrentGame({xCoord:0, yCoord:0});                           //     | X | O
+    game.playOnCurrentGame({xCoord:0, yCoord:1});                           //  ___________
+    game.playOnCurrentGame({xCoord:0, yCoord:2});                           //     | O | X  
                                                                             //  ___________ 
                                                                             //   X |   | O
 
-    assert.deepEqual([[,"X","O"],[,"O","X"],["X",,"O"]], game.board);
+    assert.deepEqual([["O","O","X"],[,"X"],[]], game.board);
   }) 
 
   it('can make moves when all the defensive plays are gone', function(){
     var game = new TicTacToeGame();
                                                                             //
-    game.playOnCurrentGame({xCoord:1, yCoord:1});                           //   X | X | O
-    game.playOnCurrentGame({xCoord:0, yCoord:2});                           //  ___________
-    game.playOnCurrentGame({xCoord:2, yCoord:2});                           //     | O | X  
-    game.playOnCurrentGame({xCoord:2, yCoord:1});                           //  ___________ 
-                                                                            //   X | O | O
+    game.playOnCurrentGame({xCoord:0, yCoord:0});                           //     | X | O
+    game.playOnCurrentGame({xCoord:0, yCoord:1});                           //  ___________
+    game.playOnCurrentGame({xCoord:0, yCoord:2});                           //     | O | X  
+    game.playOnCurrentGame({xCoord:1, yCoord:2});                           //  ___________ 
+                                                                            //   X |   | O
 
-    assert.deepEqual([["X","X","O"],[,"O","X"],["X","O","O"]], game.board);
+    assert.deepEqual([["O","O","X"],[,"X","O"],["X"]], game.board);
   }) 
 
   it('will make the winning move if available', function(){
@@ -115,16 +103,15 @@ describe('tic tac toe', function(){
     assert.equal(false, game.playsLeft);
   }) 
 
-  it('will keep playing until the game ends', function(){
+  it('will play in the corner if the first O is in the middle', function(){
     var game = new TicTacToeGame();
                                                                             //
-    game.playOnCurrentGame({xCoord:0, yCoord:0});                           //   O |  X | O
-    game.playOnCurrentGame({xCoord:0, yCoord:2});                           //  ___________
-    game.playOnCurrentGame({xCoord:2, yCoord:1});                           //   X  | X |   
+    game.playOnCurrentGame({xCoord:1, yCoord:1});                           //   X |    | 
+                                                                            //  ___________
+                                                                            //      | O |   
                                                                             //  ___________ 
-                                                                            //     |  O | 
-
-    assert.deepEqual([["O","X","O"],["X","X",],[,"O",]], game.board);
-    assert.equal(true, game.playsLeft);
+                                                                            //      |   | 
+                                                                           
+    assert.deepEqual([["X"],[,"O"],[]], game.board);
   })
 })
