@@ -136,7 +136,7 @@ function findDiagonalCompletingPlay(board, pieceToLookFor){
 }
 
 function findOffensivePlay(board){
-  //could probably be made more dynamic
+  //would like to come back and make this more dynamic
   if (board[1][1] === 'O'){ //different strategy for first move in middle vs outside
     var orderedPossibleMoves = [{x:1,y:1},{x:0,y:0},{x:0,y:1},{x:2,y:1},{x:1,y:0},{x:2,y:2},{x:0,y:2},{x:1,y:2},{x:2,y:2}];
   } else { 
