@@ -109,7 +109,6 @@ describe('tic tac toe', function(){
                                                                             //
     game.playOnCurrentGame({xCoord:0, yCoord:0});                           //   O |  X | O
     game.playOnCurrentGame({xCoord:0, yCoord:2});                           //  ___________
-    console.log("final play");
     game.playOnCurrentGame({xCoord:2, yCoord:2});                           //      | X |   
                                                                             //  ___________ 
                                                                             //     |  X | O

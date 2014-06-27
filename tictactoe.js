@@ -18,7 +18,6 @@ TicTacToeGame.prototype.playOnCurrentGame = function (move){
   if (isValidMove(move) && !this.board[move.xCoord][move.yCoord]){ 
     this.board[move.xCoord][move.yCoord] = 'O';
     if (checkForOWin(this.board)){
-      console.log("O won?");
       this.playsLeft = false;
       this.winner = 'O';
       return;
@@ -30,7 +29,6 @@ TicTacToeGame.prototype.playOnCurrentGame = function (move){
 
 TicTacToeGame.prototype.makeAiPlay = function (){ 
   var winningPlay = findWinningPlay(this.board);
-  console.log("winning play is "+winningPlay);
 
   if (winningPlay){ 
     this.board[winningPlay.xCoord][winningPlay.yCoord] = 'X';
