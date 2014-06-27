@@ -7,7 +7,6 @@ exports.index = function(req, res){
 exports.newGameBoard = function(req, res){
   var sess = req.session;
   sess.game = new TicTacToeGame().toJson();
-  sess.playPending = false;
 
   res.send({gameBoard:sess.game.board, playsLeft:sess.game.playsLeft});
 };
@@ -19,11 +18,9 @@ exports.makePlay = function(req, res){
     game.fromJson(sess.game);
   }
 
-  if (!sess.playPending && game.playsLeft){
-    sess.playPending = true;
+  if (game.playsLeft){
     game.playOnCurrentGame({xCoord: req.body.xCoord, yCoord: req.body.yCoord});
   }
-  sess.playPending = false;
   sess.game = game.toJson();
 
   res.send({gameBoard:game.board, playsLeft:game.playsLeft, winner:game.winner});
