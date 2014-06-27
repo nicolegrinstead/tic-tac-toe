@@ -17,6 +17,11 @@ TicTacToeGame.prototype.fromJson = function (jsonString){
 TicTacToeGame.prototype.playOnCurrentGame = function (move){ 
   if (isValidMove(move) && !this.board[move.xCoord][move.yCoord]){ 
     this.board[move.xCoord][move.yCoord] = 'O';
+    if (checkForOWin(this.board)){
+      this.playsLeft = false;
+      this.winner = 'O';
+      return;
+    }
 
     this.makeAiPlay();
   }   
@@ -48,26 +53,29 @@ function isValidMove(move){
   return move.xCoord <= 2 && move.yCoord <=2;
 }
 
+function checkForOWin(board){ 
+  return findRowOrColumnCompletingPlay(board, 'O').win || findDiagonalCompletingPlay(board, 'O').win;
+}
+
 function findWinningPlay(board){ 
-  var winningPlayRowsColumns = findRowOrColumnCompletingPlay(board, 'X');
+  var winningPlayRowsColumns = findRowOrColumnCompletingPlay(board, 'X').opening;
   if (winningPlayRowsColumns){ 
-    return winningPlayRowsColumns;
+    return winningPlayRowsColumns.opening;
   }
 
-  var winningDiagonalPlay = findDiagonalCompletingPlay(board,'X');
+  var winningDiagonalPlay = findDiagonalCompletingPlay(board,'X').opening;
   if (winningDiagonalPlay){ 
     return winningDiagonalPlay;
   }
 }
 
 function findDefensivePlay(board){ 
-  var defensivePlayRowsColumns = findRowOrColumnCompletingPlay(board, 'O');
-
+  var defensivePlayRowsColumns = findRowOrColumnCompletingPlay(board, 'O').opening;
   if (defensivePlayRowsColumns){ 
     return defensivePlayRowsColumns;
   }
 
-  var defensivePlayDiagnol = findDiagonalCompletingPlay(board, 'O');
+  var defensivePlayDiagnol = findDiagonalCompletingPlay(board, 'O').opening;
   if (defensivePlayDiagnol){ 
     return defensivePlayDiagnol;
   }
@@ -82,7 +90,6 @@ function findRowOrColumnCompletingPlay(board, pieceToLookFor){
     var columnOpening = undefined;
 
     for (var j=0; j<3; j++){ 
-
       //look at row 
       if (board[i][j]===pieceToLookFor){ 
         rowCount++;
@@ -96,51 +103,57 @@ function findRowOrColumnCompletingPlay(board, pieceToLookFor){
         columnOpening = {xCoord:j, yCoord:i};
       }
     }
-
+    if (rowCount==3 || columnCount==3){
+      return {opening:undefined, win:true}; 
+    }
     if (rowCount == 2 && rowOpening){ 
-      return rowOpening;
+      return {opening:rowOpening, win:undefined};
     } 
     if (columnCount == 2 && columnOpening){
-      return columnOpening;
+      return {opening:columnOpening, win:undefined};
     } 
   }
+  return {opening:undefined, win:undefined};
 }
 
 //started with this logic in with row & column checks, but it was too messy 
 function findDiagonalCompletingPlay(board, pieceToLookFor){ 
-  var oDiagOneCount = 0;
-  var oDiagTwoCount = 0;
-  var diagOneOpening;
-  var diagTwoOpening;
+  var diagOneCount = 0;
+  var diagTwoCount = 0;
+  var diagOneOpening = undefined;
+  var diagTwoOpening = undefined;
 
   for (var i=0; i<3; i++){ 
-      if (board[i][i]===pieceToLookFor){ 
-        oDiagOneCount++;
-      } else if (!board[i][i]){ 
-        diagOneOpening = {xCoord:i, yCoord:i};
-      }
-      if (board[i][2-i]===pieceToLookFor){ 
-        oDiagTwoCount++;
-      } else if (!board[i][2-i]){ 
-        diagTwoOpening = {xCoord:i, yCoord:2-i};
-      }
+    if (board[i][i]===pieceToLookFor){ 
+      diagOneCount++;
+    } else if (!board[i][i]){ 
+      diagOneOpening = {xCoord:i, yCoord:i};
     }
+    if (board[i][2-i]===pieceToLookFor){ 
+      diagTwoCount++;
+    } else if (!board[i][2-i]){ 
+      diagTwoOpening = {xCoord:i, yCoord:2-i};
+    }
+  }
+  if (diagOneCount==3 || diagTwoCount==3){
+    return {opening:undefined, win:true}; 
+  }
+  if (diagOneCount == 2){ 
+    return {opening:diagOneOpening, win:undefined};
+  } 
+  if (diagTwoCount == 2){ 
+    return {opening:diagTwoOpening, win:undefined};
+  }
 
-    if (oDiagOneCount == 2){ 
-      return diagOneOpening;
-    } 
-    if (oDiagTwoCount == 2){ 
-      return diagTwoOpening;
-    }
-  
+  return {opening:undefined, win:undefined};
 }
 
 function findOffensivePlay(board){
-  //would like to come back and make this more dynamic
-  if (board[1][1] === 'O'){ //different strategy for first move in middle vs outside
-    var orderedPossibleMoves = [{x:1,y:1},{x:0,y:0},{x:0,y:1},{x:2,y:1},{x:1,y:0},{x:2,y:2},{x:0,y:2},{x:1,y:2},{x:2,y:2}];
+  if (board[1][1] === 'O'){ //strategy if O starts in the middle
+    var orderedPossibleMoves = [{x:0,y:0},{x:0,y:1},{x:2,y:1},{x:1,y:0},{x:2,y:2},{x:0,y:2},{x:1,y:2},{x:2,y:2}];
   } else { 
     var orderedPossibleMoves = [{x:1,y:1},{x:0,y:1},{x:2,y:1},{x:1,y:0},{x:0,y:0},{x:2,y:2},{x:0,y:2},{x:1,y:2},{x:2,y:2}];
+    //var orderedPossibleMoves = [{x:1,y:1},{x:0,y:0},{x:0,y:2},{x:2,y:0},{x:2,y:2},{x:0,y:1},{x:1,y:0},{x:1,y:2},{x:2,y:1}];
   }
   for (var i=0; i<orderedPossibleMoves.length; i++){ 
     if (!board[orderedPossibleMoves[i].x][orderedPossibleMoves[i].y]){ 

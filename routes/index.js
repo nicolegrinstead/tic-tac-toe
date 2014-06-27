@@ -7,6 +7,7 @@ exports.index = function(req, res){
 exports.newGameBoard = function(req, res){
   var sess = req.session;
   sess.game = new TicTacToeGame().toJson();
+  sess.playPending = false;
 
   res.send({gameBoard:sess.game.board, playsLeft:sess.game.playsLeft});
 };

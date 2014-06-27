@@ -16,11 +16,14 @@
 </div>
 
 <script>
+//var canPlay = true;
 $(document).ready(function() {
   startNewGame();  
 
   $(document).on('click', '#game-square', function(e) { 
-    makePlay($(this));
+    //if (canPlay){ 
+      makePlay($(this));
+    //}
   }); 
 });
 
@@ -40,11 +43,13 @@ function startNewGame(){
 }
 
 function makePlay(clickedSquare){ 
+  playPending = true;
   clickedSquare.append("<span class='glyphicon glyphicon-unchecked' id='game-piece'></span>");
 
   $.post( "make-play", { xCoord: clickedSquare.data("x"), yCoord: clickedSquare.data("y") }).done(function( data ) {
     drawBoard(data.gameBoard);
     if (!data.playsLeft){
+      //canPlay = false;
       var finalMessgeText = data.winner ? "Congratulations "+data.winner+" wins!" : "Tie game!";
       $('#final-message').append(finalMessgeText);
       $('#game-over-modal').modal('show');
