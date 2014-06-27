@@ -18,6 +18,7 @@ TicTacToeGame.prototype.playOnCurrentGame = function (move){
   if (isValidMove(move) && !this.board[move.xCoord][move.yCoord]){ 
     this.board[move.xCoord][move.yCoord] = 'O';
     if (checkForOWin(this.board)){
+      console.log("O won?");
       this.playsLeft = false;
       this.winner = 'O';
       return;
@@ -29,6 +30,7 @@ TicTacToeGame.prototype.playOnCurrentGame = function (move){
 
 TicTacToeGame.prototype.makeAiPlay = function (){ 
   var winningPlay = findWinningPlay(this.board);
+  console.log("winning play is "+winningPlay);
 
   if (winningPlay){ 
     this.board[winningPlay.xCoord][winningPlay.yCoord] = 'X';
@@ -58,9 +60,9 @@ function checkForOWin(board){
 }
 
 function findWinningPlay(board){ 
-  var winningPlayRowsColumns = findRowOrColumnCompletingPlay(board, 'X').opening;
+  var winningPlayRowsColumns = findRowOrColumnCompletingPlay(board,'X').opening;
   if (winningPlayRowsColumns){ 
-    return winningPlayRowsColumns.opening;
+    return winningPlayRowsColumns;
   }
 
   var winningDiagonalPlay = findDiagonalCompletingPlay(board,'X').opening;
@@ -103,15 +105,15 @@ function findRowOrColumnCompletingPlay(board, pieceToLookFor){
         columnOpening = {xCoord:j, yCoord:i};
       }
     }
-    if (rowCount==3 || columnCount==3){
-      return {opening:undefined, win:true}; 
-    }
     if (rowCount == 2 && rowOpening){ 
       return {opening:rowOpening, win:undefined};
     } 
     if (columnCount == 2 && columnOpening){
       return {opening:columnOpening, win:undefined};
     } 
+    if (rowCount==3 || columnCount==3){
+      return {opening:undefined, win:true}; 
+    }
   }
   return {opening:undefined, win:undefined};
 }

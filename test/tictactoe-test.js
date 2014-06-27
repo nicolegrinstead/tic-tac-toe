@@ -91,7 +91,7 @@ describe('tic tac toe', function(){
     assert.deepEqual([["O","O","X"],[,"X","O"],["X"]], game.board);
   }) 
 
-  it('will make the winning move if available', function(){
+  it('will make the winning move if available on diagonal', function(){
     var game = new TicTacToeGame();
                                                                             //
     game.playOnCurrentGame({xCoord:0, yCoord:0});                           //   O | O  | X
@@ -101,6 +101,21 @@ describe('tic tac toe', function(){
                                                                             //   X |    | O
     assert.deepEqual([["O","O","X"],[,"X"],["X",,"O"]], game.board);
     assert.equal(false, game.playsLeft);
+    assert.equal('X', game.winner);
+  }) 
+
+  it('will make the winning move if available on row or column', function(){
+    var game = new TicTacToeGame();
+                                                                            //
+    game.playOnCurrentGame({xCoord:0, yCoord:0});                           //   O |  X | O
+    game.playOnCurrentGame({xCoord:0, yCoord:2});                           //  ___________
+    console.log("final play");
+    game.playOnCurrentGame({xCoord:2, yCoord:2});                           //      | X |   
+                                                                            //  ___________ 
+                                                                            //     |  X | O
+    assert.deepEqual([["O","X","O"],[,"X"],[,"X","O"]], game.board);
+    assert.equal(false, game.playsLeft);
+    assert.equal('X', game.winner);
   }) 
 
   it('will play in the corner if the first O is in the middle', function(){
