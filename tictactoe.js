@@ -1,5 +1,7 @@
-function TicTacToeGame(){ 
-  this.board = [[],[],[]];
+var _ = require("underscore");
+
+function TicTacToeGame(board){ 
+  this.board = board ? board : [[],[],[]];
   this.playsLeft = true; 
   this.winner = undefined;
 } 
@@ -14,16 +16,29 @@ TicTacToeGame.prototype.fromJson = function (jsonString){
   this.winner = JSON.parse(jsonString).winner;
 }
 
+TicTacToeGame.prototype.printBoard = function (){ 
+  for (var i=0; i<3; i++){
+    var line = "";
+    for (var j=0; j<3; j++){ 
+      line += this.board[i][j]+" ";
+    } 
+    console.log(line);
+  }
+}
+
 TicTacToeGame.prototype.playOnCurrentGame = function (move){ 
   if (isValidMove(move) && !this.board[move.xCoord][move.yCoord]){ 
     this.board[move.xCoord][move.yCoord] = 'O';
-    if (checkForOWin(this.board)){
+    if (checkForWin(this.board, 'O')){
       this.playsLeft = false;
       this.winner = 'O';
       return;
     }
 
-    this.makeAiPlay();
+    var xPlay = this.findBestNextMove();
+    this.board[xPlay.xCoord][xPlay.yCoord] = 'X';
+    //this.makeAiPlay();
+
   }   
 }
 
@@ -53,8 +68,8 @@ function isValidMove(move){
   return move.xCoord <= 2 && move.yCoord <=2;
 }
 
-function checkForOWin(board){ 
-  return findRowOrColumnCompletingPlay(board, 'O').win || findDiagonalCompletingPlay(board, 'O').win;
+function checkForWin(board, pieceToLookFor){ 
+  return findRowOrColumnCompletingPlay(board, pieceToLookFor).win || findDiagonalCompletingPlay(board, pieceToLookFor).win;
 }
 
 function findWinningPlay(board){ 
@@ -153,13 +168,101 @@ function findOffensivePlay(board){
     var orderedPossibleMoves = [{x:0,y:0},{x:0,y:1},{x:2,y:1},{x:1,y:0},{x:2,y:2},{x:0,y:2},{x:1,y:2},{x:2,y:2}];
   } else { 
     var orderedPossibleMoves = [{x:1,y:1},{x:0,y:1},{x:2,y:1},{x:1,y:0},{x:0,y:0},{x:2,y:2},{x:0,y:2},{x:1,y:2},{x:2,y:2}];
-    //var orderedPossibleMoves = [{x:1,y:1},{x:0,y:0},{x:0,y:2},{x:2,y:0},{x:2,y:2},{x:0,y:1},{x:1,y:0},{x:1,y:2},{x:2,y:1}];
   }
   for (var i=0; i<orderedPossibleMoves.length; i++){ 
     if (!board[orderedPossibleMoves[i].x][orderedPossibleMoves[i].y]){ 
       return {xCoord:orderedPossibleMoves[i].x, yCoord:orderedPossibleMoves[i].y};
     }  
   }
+}
+
+//min max for win 
+TicTacToeGame.prototype.findBestNextMove = function (){ 
+  var returned = moveOrderPermutations([], emptySpaces(this.board), this.board, {});
+  //console.log(returned);
+  return {xCoord: parseInt(returned.split(",")[0]), yCoord: parseInt(returned.split(",")[1])};
+}
+
+//alternate xs and os until you come to an end
+function moveOrderPermutations (permutation, possibleMoves, board, bestMoveMap){ 
+  var n = possibleMoves.length;
+  if (n == 0){ //no moves left
+    var nextMove = permutation[0];
+    var permutationScore = evaluatePermutation(permutation, board);
+    bestMoveMap[nextMove] = bestMoveMap[nextMove] ? bestMoveMap[nextMove] + permutationScore : permutationScore;
+    //console.log(permutation);
+  } else { 
+    for (var i=0; i<n; i++){ 
+      moveOrderPermutations(permutation.concat([possibleMoves[i]]), 
+                possibleMoves.slice(0,i).concat(possibleMoves.slice(i+1,possibleMoves.length)), 
+                board, 
+                bestMoveMap);
+      
+    }
+  }
+  //console.log(bestMoveMap);
+  return findBestPlay(bestMoveMap);
+}
+
+function findBestPlay(moveMap){ 
+  var max = Number.NEGATIVE_INFINITY;
+  var bestPlay;
+  for (var key in moveMap) {
+    if (max < moveMap[key]) {
+      max = moveMap[key];
+      bestPlay = key;
+    }
+  }
+  return bestPlay;
+}
+
+function evaluatePermutation(moves, board){ 
+  var cloned = deepCopy(board);
+  var xMove = true;
+
+  for (var i=0; i<moves.length; i++){
+    cloned[moves[i][0]][moves[i][1]] = xMove ? 'X' : 'O';
+    var score = getScore(cloned, i);
+    if (score){ 
+      return score;
+    }
+    xMove = !xMove;
+  }
+  return 1; //tie game
+}
+
+// = assignment will just reference old object
+//modificatations to new array will also change old array
+function deepCopy(board){
+  var copied = [[],[],[]];
+  for (var i=0; i<3; i++){ 
+    for (var j=0; j<3; j++){
+      copied[i][j] = board[i][j];
+    }
+  }
+  return copied; 
+}
+
+function getScore (board, depth){
+  if (checkForWin(board, 'X')) { 
+    return 10 - depth;
+  } else if (checkForWin(board, 'O')) { 
+    return depth - 10;
+  } 
+  return 0; 
+}
+
+function emptySpaces (board){ 
+  var emptySpaces = [];
+  for (var i=0; i<3; i++){ 
+    for (var j=0; j<3; j++){
+      if (!board[i][j]){ 
+        emptySpaces.push([i,j]);
+      }
+    }
+  }
+  //console.log("empties " + emptySpaces);
+  return emptySpaces;
 }
 
 module.exports = TicTacToeGame;

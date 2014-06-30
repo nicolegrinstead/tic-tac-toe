@@ -43,7 +43,7 @@ describe('tic tac toe', function(){
     assert.deepEqual([ [ 'O', 'O', 'X' ], [ , 'X' ], [] ], game.board);     //  ___________ 
                                                                             //     |   |
   })  
-
+/*
   it('will make a blocking move on a column', function(){
     var game = new TicTacToeGame();
                                                                             //
@@ -151,6 +151,26 @@ describe('tic tac toe', function(){
                                                                             //   X |    | O
     //assert.deepEqual([["O","O","X"],[,"X"],["X",,"O"]], game.board);
     //assert.equal(true, game.playsLeft);
-  }) 
+  }) */
+
+  it('combos', function(){ 
+    var game = new TicTacToeGame();  
+    game.board[0][0] = 'O';
+    game.board[0][1] = 'X';           //oxo
+    //game.board[0][2] = 'O';           //xox
+    //game.board[1][0] = 'O';
+    //game.board[1][1] = 'X';           //oxo
+    //game.board[1][2] = 'X';           //xox
+    //game.board[2][1] = 'O';
+
+    //game.printBoard();
+
+    //game.playOnCurrentGame({xCoord:0, yCoord:0}); 
+
+    console.log(game.findBestNextMove());
+
+
+  })  
+
   //00, 21, 20, 22 ->o wins
 })
