@@ -51,7 +51,14 @@ function makePlay(clickedSquare){
     drawBoard(data.gameBoard);
     if (!data.playsLeft){
       //canPlay = false;
-      var finalMessgeText = data.winner ? "Congratulations "+data.winner+" wins!" : "Tie game!";
+      var finalMessgeText;
+      if (data.winner === 'X'){
+        finalMessgeText = "Sorry X won this time.";
+      } else if (data.winner === 'O'){
+        finalMessgeText = "Congratulations O Wins!";
+      } else { 
+        finalMessgeText = "Tie game!" 
+      }
       $('#final-message').append(finalMessgeText);
       $('#game-over-modal').modal('show');
     } else { 

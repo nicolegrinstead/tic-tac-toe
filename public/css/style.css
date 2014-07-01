@@ -1,7 +1,7 @@
 #game-square{ 
 	width:120px;
 	height:120px;
-  margin-right:20px;
+  margin-right:12px;
   display:inline-block;
   background-color:rgba(240, 239, 239, 1);
   text-align: center;
@@ -14,11 +14,11 @@
 #game-container{ 
   background-color: rgba(11, 11, 128, 1);
   display: inline-block;
-  margin-bottom:-20px;
+  margin-bottom:-12px;
 }
 .board-row{ 
-  margin-bottom:20px;
-  margin-right:-20px;
+  margin-bottom:12px;
+  margin-right:-12px;
 }
 .board-row:last-child{ 
   margin-bottom: 0px;
