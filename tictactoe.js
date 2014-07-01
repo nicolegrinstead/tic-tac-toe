@@ -29,178 +29,91 @@ TicTacToeGame.prototype.printBoard = function (){
 TicTacToeGame.prototype.playOnCurrentGame = function (move){ 
   if (isValidMove(move) && !this.board[move.xCoord][move.yCoord]){ 
     this.board[move.xCoord][move.yCoord] = 'O';
-    if (checkForWin(this.board, 'O')){
+    if (findWin(this.board) == 'O'){
       this.playsLeft = false;
       this.winner = 'O';
       return;
     }
 
     var xPlay = this.findBestNextMove();
-    this.board[xPlay.xCoord][xPlay.yCoord] = 'X';
-    //this.makeAiPlay();
-
+    if (xPlay){ 
+      this.board[xPlay.xCoord][xPlay.yCoord] = 'X';
+      if (findWin(this.board) == 'X'){
+        this.playsLeft = false;
+        this.winner = 'X';
+      }  
+    } else { 
+      this.playsLeft = false;
+    }
   }   
 }
 
-TicTacToeGame.prototype.makeAiPlay = function (){ 
-  var winningPlay = findWinningPlay(this.board);
-
-  if (winningPlay){ 
-    this.board[winningPlay.xCoord][winningPlay.yCoord] = 'X';
-    this.playsLeft = false;
-    this.winner = 'X';
-  } else { 
-      var defensivePlay = findDefensivePlay(this.board);
-      if (defensivePlay){ 
-        this.board[defensivePlay.xCoord][defensivePlay.yCoord] = 'X';
-      } else { 
-        var offensivePlay = findOffensivePlay(this.board);
-        if (offensivePlay) { 
-          this.board[offensivePlay.xCoord][offensivePlay.yCoord] = 'X';
-        } else {  // no moves left!
-          this.playsLeft = false;
-        }
-      }
-  }
-}
 
 function isValidMove(move){ 
   return move.xCoord <= 2 && move.yCoord <=2;
 }
 
-function checkForWin(board, pieceToLookFor){ 
-  return findRowOrColumnCompletingPlay(board, pieceToLookFor).win || findDiagonalCompletingPlay(board, pieceToLookFor).win;
-}
-
-function findWinningPlay(board){ 
-  var winningPlayRowsColumns = findRowOrColumnCompletingPlay(board,'X').opening;
-  if (winningPlayRowsColumns){ 
-    return winningPlayRowsColumns;
-  }
-
-  var winningDiagonalPlay = findDiagonalCompletingPlay(board,'X').opening;
-  if (winningDiagonalPlay){ 
-    return winningDiagonalPlay;
-  }
-}
-
-function findDefensivePlay(board){ 
-  var defensivePlayRowsColumns = findRowOrColumnCompletingPlay(board, 'O').opening;
-  if (defensivePlayRowsColumns){ 
-    return defensivePlayRowsColumns;
-  }
-
-  var defensivePlayDiagnol = findDiagonalCompletingPlay(board, 'O').opening;
-  if (defensivePlayDiagnol){ 
-    return defensivePlayDiagnol;
-  }
-}
-
 //decided to loop only once to look at rows and columns for efficency - tradeoff is you have to keep track of more variables
-function findRowOrColumnCompletingPlay(board, pieceToLookFor){ 
+function findWin(board){ 
+  var diagOneOCount = 0;
+  var diagOneXCount = 0;
+  var diagTwoOCount = 0;
+  var diagTwoXCount = 0;
+
   for (var i=0; i<3; i++){ 
-    var rowCount = 0;
-    var columnCount = 0;
-    var rowOpening = undefined;
-    var columnOpening = undefined;
+    var oRowCount = 0;
+    var oColumnCount = 0;
+    var xRowCount = 0;
+    var xColumnCount = 0;
+
+    if (board[i][i]=== 'O') diagOneOCount++;
+    if (board[i][i]=== 'X') diagOneXCount++;
+    if (board[i][2-i]=== 'O') diagTwoOCount++;
+    if (board[i][2-i]=== 'X') diagTwoXCount++;
 
     for (var j=0; j<3; j++){ 
-      //look at row 
-      if (board[i][j]===pieceToLookFor){ 
-        rowCount++;
-      } else if (!board[i][j]){ 
-        rowOpening = {xCoord:i, yCoord:j};
-      }
-      //look at column
-      if (board[j][i]===pieceToLookFor){ 
-        columnCount++;
-      } else if (!board[j][i]){ 
-        columnOpening = {xCoord:j, yCoord:i};
-      }
+      if (board[i][j]==='O') oRowCount++;
+      if (board[i][j]==='X') xRowCount++;
+      if (board[j][i]==='O') oColumnCount++;
+      if (board[j][i]==='X') xColumnCount++;
     }
-    if (rowCount == 2 && rowOpening){ 
-      return {opening:rowOpening, win:undefined};
-    } 
-    if (columnCount == 2 && columnOpening){
-      return {opening:columnOpening, win:undefined};
-    } 
-    if (rowCount==3 || columnCount==3){
-      return {opening:undefined, win:true}; 
+    if (oRowCount==3 || oColumnCount==3 || diagOneOCount==3 || diagTwoOCount==3){
+      return 'O';
+    }
+    if (xRowCount==3 || xColumnCount==3 || diagOneXCount==3 || diagTwoXCount==3){
+      return 'X'; 
     }
   }
-  return {opening:undefined, win:undefined};
+  return undefined;
 }
 
-//started with this logic in with row & column checks, but it was too messy 
-function findDiagonalCompletingPlay(board, pieceToLookFor){ 
-  var diagOneCount = 0;
-  var diagTwoCount = 0;
-  var diagOneOpening = undefined;
-  var diagTwoOpening = undefined;
-
-  for (var i=0; i<3; i++){ 
-    if (board[i][i]===pieceToLookFor){ 
-      diagOneCount++;
-    } else if (!board[i][i]){ 
-      diagOneOpening = {xCoord:i, yCoord:i};
-    }
-    if (board[i][2-i]===pieceToLookFor){ 
-      diagTwoCount++;
-    } else if (!board[i][2-i]){ 
-      diagTwoOpening = {xCoord:i, yCoord:2-i};
-    }
-  }
-  if (diagOneCount==3 || diagTwoCount==3){
-    return {opening:undefined, win:true}; 
-  }
-  if (diagOneCount == 2){ 
-    return {opening:diagOneOpening, win:undefined};
-  } 
-  if (diagTwoCount == 2){ 
-    return {opening:diagTwoOpening, win:undefined};
-  }
-
-  return {opening:undefined, win:undefined};
-}
-
-function findOffensivePlay(board){
-  if (board[1][1] === 'O'){ //strategy if O starts in the middle
-    var orderedPossibleMoves = [{x:0,y:0},{x:0,y:1},{x:2,y:1},{x:1,y:0},{x:2,y:2},{x:0,y:2},{x:1,y:2},{x:2,y:2}];
-  } else { 
-    var orderedPossibleMoves = [{x:1,y:1},{x:0,y:1},{x:2,y:1},{x:1,y:0},{x:0,y:0},{x:2,y:2},{x:0,y:2},{x:1,y:2},{x:2,y:2}];
-  }
-  for (var i=0; i<orderedPossibleMoves.length; i++){ 
-    if (!board[orderedPossibleMoves[i].x][orderedPossibleMoves[i].y]){ 
-      return {xCoord:orderedPossibleMoves[i].x, yCoord:orderedPossibleMoves[i].y};
-    }  
-  }
-}
-
-//min max for win 
 TicTacToeGame.prototype.findBestNextMove = function (){ 
-  var returned = moveOrderPermutations([], emptySpaces(this.board), this.board, {});
-  //console.log(returned);
-  return {xCoord: parseInt(returned.split(",")[0]), yCoord: parseInt(returned.split(",")[1])};
+  if (!this.board[1][1]){ 
+    return {xCoord: 1, yCoord: 1}; //start in the middle if it's available
+  }
+  var emptySpaces = findEmptySpaces(this.board);
+  if (emptySpaces.length > 0) { 
+    var nextBestMove = bestPlayInMoveOrderPermutations([], emptySpaces, this.board, {});
+    return {xCoord: parseInt(nextBestMove.split(",")[0]), yCoord: parseInt(nextBestMove.split(",")[1])};
+  }
+  return undefined; //no moves left
 }
 
-//alternate xs and os until you come to an end
-function moveOrderPermutations (permutation, possibleMoves, board, bestMoveMap){ 
+function bestPlayInMoveOrderPermutations (permutation, possibleMoves, board, bestMoveMap){ 
   var n = possibleMoves.length;
-  if (n == 0){ //no moves left
+  if (n == 0){ //no more moves to re-arrange
     var nextMove = permutation[0];
     var permutationScore = evaluatePermutation(permutation, board);
     bestMoveMap[nextMove] = bestMoveMap[nextMove] ? bestMoveMap[nextMove] + permutationScore : permutationScore;
-    //console.log(permutation);
   } else { 
     for (var i=0; i<n; i++){ 
-      moveOrderPermutations(permutation.concat([possibleMoves[i]]), 
+      bestPlayInMoveOrderPermutations(permutation.concat([possibleMoves[i]]), 
                 possibleMoves.slice(0,i).concat(possibleMoves.slice(i+1,possibleMoves.length)), 
                 board, 
                 bestMoveMap);
       
     }
   }
-  //console.log(bestMoveMap);
   return findBestPlay(bestMoveMap);
 }
 
@@ -222,10 +135,11 @@ function evaluatePermutation(moves, board){
 
   for (var i=0; i<moves.length; i++){
     cloned[moves[i][0]][moves[i][1]] = xMove ? 'X' : 'O';
-    var score = getScore(cloned, i);
-    if (score){ 
-      return score;
-    }
+
+    var winner = findWin(cloned);
+    if (winner == 'X') return 10 - i;
+    if (winner == 'O') return i - 10;
+
     xMove = !xMove;
   }
   return 1; //tie game
@@ -243,16 +157,7 @@ function deepCopy(board){
   return copied; 
 }
 
-function getScore (board, depth){
-  if (checkForWin(board, 'X')) { 
-    return 10 - depth;
-  } else if (checkForWin(board, 'O')) { 
-    return depth - 10;
-  } 
-  return 0; 
-}
-
-function emptySpaces (board){ 
+function findEmptySpaces (board){ 
   var emptySpaces = [];
   for (var i=0; i<3; i++){ 
     for (var j=0; j<3; j++){
@@ -261,7 +166,6 @@ function emptySpaces (board){
       }
     }
   }
-  //console.log("empties " + emptySpaces);
   return emptySpaces;
 }
 
