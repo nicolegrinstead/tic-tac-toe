@@ -16,16 +16,6 @@ TicTacToeGame.prototype.fromJson = function (jsonString){
   this.winner = JSON.parse(jsonString).winner;
 }
 
-TicTacToeGame.prototype.printBoard = function (){ 
-  for (var i=0; i<3; i++){
-    var line = "";
-    for (var j=0; j<3; j++){ 
-      line += this.board[i][j]+" ";
-    } 
-    console.log(line);
-  }
-}
-
 TicTacToeGame.prototype.playOnCurrentGame = function (move){ 
   if (isValidMove(move) && !this.board[move.xCoord][move.yCoord]){ 
     this.board[move.xCoord][move.yCoord] = 'O';
@@ -48,6 +38,19 @@ TicTacToeGame.prototype.playOnCurrentGame = function (move){
   }   
 }
 
+TicTacToeGame.prototype.findBestNextMove = function (){ 
+  if (!this.board[1][1]){ 
+    return {xCoord: 1, yCoord: 1}; //start in the middle if it's available
+  }
+
+  var emptySpaces = findEmptySpaces(this.board);
+  if (emptySpaces.length > 0) { 
+    var nextBestMove = bestPlayInMoveOrderPermutations([], emptySpaces, this.board, {});
+    return {xCoord: parseInt(nextBestMove.split(",")[0]), yCoord: parseInt(nextBestMove.split(",")[1])};
+  }
+  
+  return undefined; //no moves left
+}
 
 function isValidMove(move){ 
   return move.xCoord <= 2 && move.yCoord <=2;
@@ -87,18 +90,6 @@ function findWin(board){
   return undefined;
 }
 
-TicTacToeGame.prototype.findBestNextMove = function (){ 
-  if (!this.board[1][1]){ 
-    return {xCoord: 1, yCoord: 1}; //start in the middle if it's available
-  }
-  var emptySpaces = findEmptySpaces(this.board);
-  if (emptySpaces.length > 0) { 
-    var nextBestMove = bestPlayInMoveOrderPermutations([], emptySpaces, this.board, {});
-    return {xCoord: parseInt(nextBestMove.split(",")[0]), yCoord: parseInt(nextBestMove.split(",")[1])};
-  }
-  return undefined; //no moves left
-}
-
 function bestPlayInMoveOrderPermutations (permutation, possibleMoves, board, bestMoveMap){ 
   var n = possibleMoves.length;
   if (n == 0){ //no more moves to re-arrange
@@ -130,7 +121,7 @@ function findBestPlay(moveMap){
 }
 
 function evaluatePermutation(moves, board){ 
-  var cloned = deepCopy(board);
+  var cloned = JSON.parse(JSON.stringify(board)); //need a new object or modifications to cloned will change board too
   var xMove = true;
 
   for (var i=0; i<moves.length; i++){
@@ -143,18 +134,6 @@ function evaluatePermutation(moves, board){
     xMove = !xMove;
   }
   return 1; //tie game
-}
-
-// = assignment will just reference old object
-//modificatations to new array will also change old array
-function deepCopy(board){
-  var copied = [[],[],[]];
-  for (var i=0; i<3; i++){ 
-    for (var j=0; j<3; j++){
-      copied[i][j] = board[i][j];
-    }
-  }
-  return copied; 
 }
 
 function findEmptySpaces (board){ 
