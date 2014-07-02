@@ -124,7 +124,9 @@ function evaluatePermutation(moves, board){
   var cloned = JSON.parse(JSON.stringify(board)); //need a new object or modifications to cloned will change board too
   var xMove = true;
 
-  for (var i=0; i<moves.length; i++){
+  var movesToCheck = moves.length < 3 ? moves.length : 3;
+
+  for (var i=0; i<movesToCheck; i++){
     cloned[moves[i][0]][moves[i][1]] = xMove ? 'X' : 'O';
 
     var winner = findWin(cloned);
