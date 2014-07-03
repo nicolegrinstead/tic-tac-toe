@@ -134,11 +134,11 @@ describe('tic tac toe', function(){
                                                                             //
     game.playOnCurrentGame({xCoord:0, yCoord:0});                           //   O | O | X
     game.playOnCurrentGame({xCoord:2, yCoord:1});                           //  ___________
-    game.playOnCurrentGame({xCoord:2, yCoord:0});                           //   X | X | O
+    game.playOnCurrentGame({xCoord:0, yCoord:2});                           //   X | X | O
     game.playOnCurrentGame({xCoord:1, yCoord:2});                           //  ___________
-    game.playOnCurrentGame({xCoord:0, yCoord:1});                           //   O | O | X
+    game.playOnCurrentGame({xCoord:1, yCoord:0});                           //   O | O | X
 
-    assert.deepEqual([["O","O","X"],["X","X","O"],["O","O","X"]], game.board);
+    assert.deepEqual([["O","X","O"],["O","X","O"],["X","O","X"]], game.board);
     assert.equal(false, game.playsLeft);
   })
 
