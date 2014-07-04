@@ -39,17 +39,10 @@ TicTacToeGame.prototype.playOnCurrentGame = function (move){
 }
 
 TicTacToeGame.prototype.findBestNextMove = function (){
-  if (!this.board[1][1]){
-    return {xCoord: 1, yCoord: 1}; //start in the middle if it's available
-  }
-
   var emptySpaces = this.findEmptySpaces(this.board);
 
-  if (this.board[0][0]=="O" && this.board[2][2]=="O" && emptySpaces.length == 6){
+  if (hasEarlySplit(this.board, emptySpaces.length)){
     return {xCoord: 0, yCoord: 1};
-  }
-  if (this.board[0][2]=="O" && this.board[2][0]=="O" && emptySpaces.length == 6){
-    return {xCoord: 2, yCoord: 1};
   }
 
   if (emptySpaces.length > 0) {
@@ -58,8 +51,6 @@ TicTacToeGame.prototype.findBestNextMove = function (){
     var nextBestMove = findBestPlay(movesMap);
     return {xCoord: parseInt(nextBestMove.split(",")[0]), yCoord: parseInt(nextBestMove.split(",")[1])};
   }
-
-  return undefined; //no moves left
 }
 
 TicTacToeGame.prototype.isValidMove = function (move){
@@ -87,7 +78,7 @@ function bestPlayInMoveOrderPermutations (permutation, possibleMoves, board, bes
   } else {
     for (var i=0; i<n; i++){
       bestPlayInMoveOrderPermutations(permutation.concat([possibleMoves[i]]),
-                possibleMoves.slice(0,i).concat(possibleMoves.slice(i+1,possibleMoves.length)),
+                possibleMoves.slice(0,i).concat(possibleMoves.slice(i+1)),
                 board,
                 bestMoveMap);
 
@@ -123,6 +114,9 @@ function evaluatePermutation(moves, board){
   return 1; //tie game
 }
 
+function hasEarlySplit(board, numberOfMovesLeft){
+  return (board[0][2]=="O" && board[2][0]=="O" || board[0][0]=="O" && board[2][2]=="O") && numberOfMovesLeft == 6
+}
 
 //decided to loop only once to look at rows and columns for efficency - tradeoff is you have to keep track of more variables
 function findWin(board){
