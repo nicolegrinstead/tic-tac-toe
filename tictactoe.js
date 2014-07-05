@@ -39,6 +39,10 @@ TicTacToeGame.prototype.playOnCurrentGame = function (move){
 }
 
 TicTacToeGame.prototype.findBestNextMove = function (){
+  if (!this.board[1][1]){ //start in the middle
+    return {xCoord: 1, yCoord: 1};
+  }
+
   var emptySpaces = this.findEmptySpaces(this.board);
 
   if (hasEarlySplit(this.board, emptySpaces.length)){
