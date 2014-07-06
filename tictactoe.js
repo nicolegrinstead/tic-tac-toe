@@ -4,16 +4,18 @@ function TicTacToeGame(board){
   this.board = board ? board : [[],[],[]];
   this.playsLeft = true;
   this.winner = undefined;
+  this.unbeatable = true;
 }
 
 TicTacToeGame.prototype.toJson = function (){
-  return JSON.stringify({board:this.board, playsLeft:this.playsLeft, winner:this.winner});
+  return JSON.stringify({board:this.board, playsLeft:this.playsLeft, winner:this.winner, unbeatable:this.unbeatable});
 }
 
 TicTacToeGame.prototype.fromJson = function (jsonString){
   this.board = JSON.parse(jsonString).board;
   this.playsLeft = JSON.parse(jsonString).playsLeft;
   this.winner = JSON.parse(jsonString).winner;
+  this.unbeatable = JSON.parse(jsonString).unbeatable;
 }
 
 TicTacToeGame.prototype.playOnCurrentGame = function (move){
@@ -25,7 +27,13 @@ TicTacToeGame.prototype.playOnCurrentGame = function (move){
       return;
     }
 
-    var xPlay = this.findBestNextMove();
+    var xPlay;
+    if (this.unbeatable){
+      xPlay = this.findBestNextMove();
+    } else {
+      xPlay = this.findRandomMove();
+    }
+
     if (xPlay){
       this.board[xPlay.xCoord][xPlay.yCoord] = 'X';
       if (findWin(this.board) == 'X'){
@@ -35,6 +43,14 @@ TicTacToeGame.prototype.playOnCurrentGame = function (move){
     } else {
       this.playsLeft = false;
     }
+  }
+}
+
+TicTacToeGame.prototype.findRandomMove = function (){
+  var emptySpaces = this.findEmptySpaces(this.board);
+  if (emptySpaces.length > 0) {
+    var randomSpace = _.random(emptySpaces.length-1);
+    return {xCoord: emptySpaces[randomSpace][0], yCoord: emptySpaces[randomSpace][1]};
   }
 }
 
@@ -119,7 +135,7 @@ function evaluatePermutation(moves, board){
 }
 
 function hasEarlySplit(board, numberOfMovesLeft){
-  return (board[0][2]=="O" && board[2][0]=="O" || board[0][0]=="O" && board[2][2]=="O") && numberOfMovesLeft == 6
+  return (board[0][2]=="O" && board[2][0]=="O" || board[0][0]=="O" && board[2][2]=="O") && numberOfMovesLeft == 6;
 }
 
 //decided to loop only once to look at rows and columns for efficency - tradeoff is you have to keep track of more variables

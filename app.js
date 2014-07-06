@@ -42,7 +42,7 @@ var port = process.env.PORT || 5000;
 app.get('/', routes.index);
 app.get('/new-game-board', routes.newGameBoard);
 app.post('/make-play', routes.makePlay);
-///view/:id
+app.post('/change-difficulty', routes.changeDifficulty);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

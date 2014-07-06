@@ -1,7 +1,15 @@
 var playPending = false;
 
 $(document).ready(function() {
+
   startNewGame();
+
+  $( "#unbeatable").click(function() {
+    $.post( "change-difficulty", {difficulty:"unbeatable"});
+  });
+  $( "#easy").click(function() {
+    $.post( "change-difficulty", {difficulty:"easy"});
+  });
 
   $(document).on('click', '#game-square', function(e) {
       if (!playPending){
