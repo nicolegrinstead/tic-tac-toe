@@ -7,8 +7,6 @@
 
     <title><%- title %></title>
     <link rel="icon" type="image/png" href="../img/favicon.png">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-
 
     <% settings.jsFiles.forEach(function(file) { %>
       <script src="<%- file %>?v=<%= settings.version %>"></script>
@@ -16,52 +14,44 @@
   </head>
   <body>
 <div class="wrapper">
-  <header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
-  <div class="container">
-    <div class="navbar-header">
-      <span class="navbar-brand">TIC-TAC-TOE</span>
-    </div>
-    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
-      <ul class="nav navbar-nav">
-        <li>
-          <a href="/">Start a new game</a>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Difficulty<span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
+    <header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
+      <div class="container">
+        <div class="navbar-header">
+          <span class="navbar-brand">TIC-TAC-TOE</span>
+        </div>
+        <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+          <ul class="nav navbar-nav">
             <li>
-              <% if (unbeatable) { %>
-                <a id="unbeatable" href="/"><span class="glyphicon glyphicon-star-empty"></span>Unbeatable</a></li>
-              <% } else { %>
-                <a id="unbeatable" href="/">Unbeatable</a></li>
-              <% } %>
-            <li>
-              <% if (!unbeatable) { %>
-                <a id="easy" href="/"><span class="glyphicon glyphicon-star-empty"></span>Easy</a></li>
-              <% } else { %>
-                <a id="easy" href="/">Easy</a></li>
-              <% } %>
+              <a href="/">Start a new game</a>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Difficulty<span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li>
+                  <% if (unbeatable) { %>
+                    <a id="unbeatable" href="/"><span class="glyphicon glyphicon-star-empty"></span>Unbeatable</a></li>
+                  <% } else { %>
+                    <a id="unbeatable" href="/">Unbeatable</a></li>
+                  <% } %>
+                <li>
+                  <% if (!unbeatable) { %>
+                    <a id="easy" href="/"><span class="glyphicon glyphicon-star-empty"></span>Easy</a></li>
+                  <% } else { %>
+                    <a id="easy" href="/">Easy</a></li>
+                  <% } %>
+                </li>
+              </ul>
             </li>
           </ul>
-        </li>
-      </ul>
-    </nav>
-  </div>
-</header>
-
-  <div class="container-fluid">
-    <div class="row-fluid">
-
-      <div id="content" class="span11">
-        <%- body %>
+        </nav>
       </div>
-    </div>
-  </div> <!-- wrapper -->
+    </header>
 
-  <div class='footer-push'></div>
+    <div class="container">
+      <%- body %>
+    </div> <!-- wrapper -->
 
 </div>
-<div class="clearfix"></div>
 
 </body>
 </html>

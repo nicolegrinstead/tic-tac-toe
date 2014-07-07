@@ -4,12 +4,11 @@
  */
 
 var express = require('express');
-//var connect = require('connect');
 var routes = require('./routes');
 var expressLayouts = require('express-ejs-layouts');
 var package = require('./package.json');
 var resources = require('./app.resources.js');
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 
 var http = require('http');
 var path = require('path');
@@ -23,9 +22,9 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
-app.use(bodyParser.urlencoded())
-app.use(bodyParser.json())
-app.use(bodyParser.json({ type: 'application/vnd.api+json' }))
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
+app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
 app.use(session({secret: 'keyboard cat'}));
 app.use(expressLayouts);
