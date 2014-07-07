@@ -2,7 +2,7 @@ module.exports = {
     jsFiles: [
 		'js/jquery-1.9.0.js',
 		'js/bootstrap.min.js',
-		'js/tic-tac-toe-app.js'
+		'js/tictactoe-frontend.js'
 	],
 
     cssFiles: [

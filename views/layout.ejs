@@ -29,8 +29,19 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Difficulty<span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li id="unbeatable-choice"><a id="unbeatable" href="/">Unbeatable</a></li>
-            <li id="unbeatable-choice"><a id="easy" href="/">Easy</a></li>
+            <li>
+              <% if (unbeatable) { %>
+                <a id="unbeatable" href="/"><span class="glyphicon glyphicon-star-empty"></span>Unbeatable</a></li>
+              <% } else { %>
+                <a id="unbeatable" href="/">Unbeatable</a></li>
+              <% } %>
+            <li>
+              <% if (!unbeatable) { %>
+                <a id="easy" href="/"><span class="glyphicon glyphicon-star-empty"></span>Easy</a></li>
+              <% } else { %>
+                <a id="easy" href="/">Easy</a></li>
+              <% } %>
+            </li>
           </ul>
         </li>
       </ul>

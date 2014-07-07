@@ -1,10 +1,9 @@
 var playPending = false;
 
 $(document).ready(function() {
-
   startNewGame();
 
-  $( "#unbeatable").click(function() {
+  $("#unbeatable").click(function() {
     $.post( "change-difficulty", {difficulty:"unbeatable"});
   });
   $( "#easy").click(function() {

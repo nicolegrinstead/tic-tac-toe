@@ -1,14 +1,19 @@
 var TicTacToeGame = require('../tictactoe.js');
 
 exports.index = function(req, res){
-  res.render('index', {title:"tic-tac-toe"});
+  var sess = req.session;
+  if (typeof sess.unbeatable === "undefined"){
+    sess.unbeatable = true;
+  }
+
+  res.render('index', {title:"tic-tac-toe", unbeatable:sess.unbeatable});
 };
 
 exports.newGameBoard = function(req, res){
   var sess = req.session;
   var newGame = new TicTacToeGame();
 
-  if (sess.unbeatable != undefined) {
+  if (typeof sess.unbeatable != "undefined") {
     newGame.unbeatable = sess.unbeatable;
   }
 

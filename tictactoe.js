@@ -66,9 +66,9 @@ TicTacToeGame.prototype.findBestNextMove = function (){
   }
 
   if (emptySpaces.length > 0) {
-    var movesMap = bestPlayInMoveOrderPermutations([], emptySpaces, this.board, {});
+    var rankedMoveMap = checkAllPermutations([], emptySpaces, this.board, {});
 
-    var nextBestMove = findBestPlay(movesMap);
+    var nextBestMove = findBestPlay(rankedMoveMap);
     return {xCoord: parseInt(nextBestMove.split(",")[0]), yCoord: parseInt(nextBestMove.split(",")[1])};
   }
 }
@@ -89,7 +89,7 @@ TicTacToeGame.prototype.findEmptySpaces = function (){
   return emptySpaces;
 }
 
-function bestPlayInMoveOrderPermutations (permutation, possibleMoves, board, bestMoveMap){
+function checkAllPermutations (permutation, possibleMoves, board, bestMoveMap){
   var n = possibleMoves.length;
   if (n == 0){ //no more moves to re-arrange
     var nextMove = permutation[0];
@@ -97,7 +97,7 @@ function bestPlayInMoveOrderPermutations (permutation, possibleMoves, board, bes
     bestMoveMap[nextMove] = bestMoveMap[nextMove] ? bestMoveMap[nextMove] + permutationScore : permutationScore;
   } else {
     for (var i=0; i<n; i++){
-      bestPlayInMoveOrderPermutations(permutation.concat([possibleMoves[i]]),
+      checkAllPermutations(permutation.concat([possibleMoves[i]]),
                 possibleMoves.slice(0,i).concat(possibleMoves.slice(i+1)),
                 board,
                 bestMoveMap);
@@ -138,7 +138,6 @@ function hasEarlySplit(board, numberOfMovesLeft){
   return (board[0][2]=="O" && board[2][0]=="O" || board[0][0]=="O" && board[2][2]=="O") && numberOfMovesLeft == 6;
 }
 
-//decided to loop only once to look at rows and columns for efficency - tradeoff is you have to keep track of more variables
 function findWin(board){
   var diagOneOCount = 0;
   var diagOneXCount = 0;
